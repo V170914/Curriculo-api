@@ -1,0 +1,1663 @@
+{
+  "info": {
+    "name": "API Currículo - Vitória Inácia",
+    "description": "Testes da API REST (Express + PostgreSQL/NeonDB). Altere `baseUrl` e os ids em Variables da coleção. Ordem sugerida: criar/atualizar entidades, testar Relacionamentos e, por fim, a pasta Deletar. Os POSTs de criação guardam o id criado automaticamente nas variáveis; para consultar as pessoas já cadastradas no banco, altere pessoaId para 1 ou 2.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://SEU-PROJETO.vercel.app",
+      "type": "string"
+    },
+    {
+      "key": "pessoaId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "formacaoId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "experienciaId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "projetoId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "idiomaId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "habilidadeId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Status da API",
+      "item": [
+        {
+          "name": "GET /",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pessoas",
+      "item": [
+        {
+          "name": "Listar Pessoas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Maria Teste\",\n  \"email\": \"maria.teste@example.com\",\n  \"telefone\": \"(81) 99999-0000\",\n  \"cidade\": \"Recife, PE\",\n  \"resumo\": \"Pessoa criada pelo Postman.\",\n  \"github\": \"https://github.com/maria-teste\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 (criado)', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.id) { pm.collectionVariables.set('pessoaId', j.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cidade\": \"Olinda, PE\",\n  \"resumo\": \"Resumo atualizado pelo Postman.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Formacoes",
+      "item": [
+        {
+          "name": "Listar Formacoes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/formacoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "formacoes"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/formacoes/{{formacaoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "formacoes",
+                "{{formacaoId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/formacoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "formacoes"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pessoa_id\": \"{{pessoaId}}\",\n  \"instituicao\": \"Universidade Católica de Pernambuco\",\n  \"curso\": \"Sistemas para Internet\",\n  \"nivel\": \"Tecnólogo\",\n  \"data_inicio\": \"2024-02-01\",\n  \"descricao\": \"Criada pelo Postman.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 (criado)', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.id) { pm.collectionVariables.set('formacaoId', j.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/formacoes/{{formacaoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "formacoes",
+                "{{formacaoId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data_fim\": \"2026-12-15\",\n  \"descricao\": \"Formação atualizada.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar formações de uma pessoa (filtro)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/formacoes?pessoa_id={{pessoaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "formacoes"
+              ],
+              "query": [
+                {
+                  "key": "pessoa_id",
+                  "value": "{{pessoaId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Experiencias",
+      "item": [
+        {
+          "name": "Listar Experiencias",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/experiencias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "experiencias"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/experiencias/{{experienciaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "experiencias",
+                "{{experienciaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/experiencias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "experiencias"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pessoa_id\": \"{{pessoaId}}\",\n  \"empresa\": \"Capgemini\",\n  \"cargo\": \"Desenvolvedora Backend Java\",\n  \"descricao\": \"Sistemas bancários.\",\n  \"data_inicio\": \"2026-05-01\",\n  \"atual\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 (criado)', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.id) { pm.collectionVariables.set('experienciaId', j.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/experiencias/{{experienciaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "experiencias",
+                "{{experienciaId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cargo\": \"Desenvolvedora Backend Java Jr.\",\n  \"descricao\": \"Descrição atualizada.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar experiências de uma pessoa (filtro)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/experiencias?pessoa_id={{pessoaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "experiencias"
+              ],
+              "query": [
+                {
+                  "key": "pessoa_id",
+                  "value": "{{pessoaId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Projetos",
+      "item": [
+        {
+          "name": "Listar Projetos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projetos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos",
+                "{{projetoId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pessoa_id\": \"{{pessoaId}}\",\n  \"titulo\": \"Projeto criado no Postman\",\n  \"descricao\": \"Descrição do projeto.\",\n  \"link_repositorio\": \"https://github.com/V170914/exemplo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 (criado)', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.id) { pm.collectionVariables.set('projetoId', j.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos",
+                "{{projetoId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descricao\": \"Descrição atualizada.\",\n  \"link_deploy\": \"https://exemplo.vercel.app\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar projetos de uma pessoa (filtro)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projetos?pessoa_id={{pessoaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos"
+              ],
+              "query": [
+                {
+                  "key": "pessoa_id",
+                  "value": "{{pessoaId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Idiomas",
+      "item": [
+        {
+          "name": "Listar Idiomas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/idiomas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "idiomas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/idiomas/{{idiomaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "idiomas",
+                "{{idiomaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/idiomas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "idiomas"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pessoa_id\": \"{{pessoaId}}\",\n  \"idioma\": \"Inglês\",\n  \"nivel\": \"B1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 (criado)', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.id) { pm.collectionVariables.set('idiomaId', j.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/idiomas/{{idiomaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "idiomas",
+                "{{idiomaId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nivel\": \"B2\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar idiomas de uma pessoa (filtro)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/idiomas?pessoa_id={{pessoaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "idiomas"
+              ],
+              "query": [
+                {
+                  "key": "pessoa_id",
+                  "value": "{{pessoaId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Habilidades",
+      "item": [
+        {
+          "name": "Listar Habilidades",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habilidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "habilidades"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Buscar por id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habilidades/{{habilidadeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "habilidades",
+                "{{habilidadeId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/habilidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "habilidades"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Docker\",\n  \"categoria\": \"DevOps\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201 (criado)', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json();",
+                  "if (j.id) { pm.collectionVariables.set('habilidadeId', j.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/habilidades/{{habilidadeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "habilidades",
+                "{{habilidadeId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoria\": \"Ferramentas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Relacionamentos",
+      "item": [
+        {
+          "name": "Currículo completo da pessoa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}/curriculo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}",
+                "curriculo"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1:N - Formações da pessoa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}/formacoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}",
+                "formacoes"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1:N - Experiências da pessoa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}/experiencias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}",
+                "experiencias"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1:N - Projetos da pessoa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}/projetos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}",
+                "projetos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1:N - Idiomas da pessoa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}/idiomas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}",
+                "idiomas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "N:N - Habilidades da pessoa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}/habilidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}",
+                "habilidades"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "N:N - Vincular habilidade à pessoa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}/habilidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}",
+                "habilidades"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"habilidade_id\": \"{{habilidadeId}}\",\n  \"nivel\": \"Intermediário\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "N:N - Desvincular habilidade da pessoa",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}/habilidades/{{habilidadeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}",
+                "habilidades",
+                "{{habilidadeId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "N:N - Habilidades do projeto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}/habilidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos",
+                "{{projetoId}}",
+                "habilidades"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "N:N - Vincular habilidade ao projeto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}/habilidades",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos",
+                "{{projetoId}}",
+                "habilidades"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"habilidade_id\": \"{{habilidadeId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "N:N - Desvincular habilidade do projeto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}/habilidades/{{habilidadeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos",
+                "{{projetoId}}",
+                "habilidades",
+                "{{habilidadeId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Inverso - Pessoas com a habilidade",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habilidades/{{habilidadeId}}/pessoas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "habilidades",
+                "{{habilidadeId}}",
+                "pessoas"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Inverso - Projetos com a habilidade",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habilidades/{{habilidadeId}}/projetos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "habilidades",
+                "{{habilidadeId}}",
+                "projetos"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Deletar (limpeza)",
+      "item": [
+        {
+          "name": "Deletar idioma",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/idiomas/{{idiomaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "idiomas",
+                "{{idiomaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deletar projeto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projetos/{{projetoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "projetos",
+                "{{projetoId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deletar experiência",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/experiencias/{{experienciaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "experiencias",
+                "{{experienciaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deletar formação",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/formacoes/{{formacaoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "formacoes",
+                "{{formacaoId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deletar habilidade",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/habilidades/{{habilidadeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "habilidades",
+                "{{habilidadeId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deletar pessoa (apaga em cascata tudo dela)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pessoas/{{pessoaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pessoas",
+                "{{pessoaId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
